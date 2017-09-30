@@ -34,38 +34,35 @@ Module.register("MMM-bernwordclock",{
 
 		this.elements = [];
 
-		this.elements["hour1"] = "one";
-		this.elements["hour2"] = "two";
-		this.elements["hour3"] = "three";
-		this.elements["hour4"] = "four";
-		this.elements["hour5"] = "five";
-		this.elements["hour6"] = "six";
-		this.elements["hour7"] = "seven";
-		this.elements["hour8"] = "eight";
-		this.elements["hour9"] = "nine";
-		this.elements["hour10"] = "ten";
-		this.elements["hour11"] = "eleven";
-		this.elements["hour12"] = "twelve";
+		this.elements["hour1"] = "eis";
+		this.elements["hour2"] = "zwöi";
+		this.elements["hour3"] = "drü";
+		this.elements["hour4"] = "vieri";
+		this.elements["hour5"] = "füfi";
+		this.elements["hour6"] = "sächsi";
+		this.elements["hour7"] = "sibni";
+		this.elements["hour8"] = "achti";
+		this.elements["hour9"] = "nüni";
+		this.elements["hour10"] = "zäni";
+		this.elements["hour11"] = "eufi";
+		this.elements["hour12"] = "zwöufi";
 
-		this.elements["before"] = "to";
-		this.elements["past"] = "past";
+		this.elements["befor"] = "vor";
+		this.elements["past"] = "ab";
 
-		this.elements["five"] = "five";
-		this.elements["ten"] = "ten";
-		this.elements["quarter"] = "quarter";
-		this.elements["twenty"] = "twenty";
-		this.elements["half"] = "half";
+		this.elements["five"] = "füf";
+		this.elements["ten"] = "zää";
+		this.elements["quarter"] = "viertu";
+		this.elements["twenty"] = "zwänzg";
+		this.elements["half"] = "haubi";
 
-		this.elements["it"] = "it";
-		this.elements["is"] = "is";
+		this.elements["it"] = "es";
+		this.elements["is"] = "isch";
 
 		this.elements["dot1"] = "dot1";
 		this.elements["dot2"] = "dot2";
 		this.elements["dot3"] = "dot3";
 		this.elements["dot4"] = "dot4";
-		this.elements["oclock"] = "oclock";
-
-		this.elements["anniversary"] = "V&S07222016"
 
 		// Set Interval for Update
 		var self = this;
@@ -81,20 +78,18 @@ Module.register("MMM-bernwordclock",{
 	    var currentTime = moment();
 	    var elements = ["it","is"];
 
-	  var month = currentTime.month();
-	  var day = currentTime.day();
 
 		var hour = currentTime.hour() % 12;
 		var minute = currentTime.minute();
-		if (month == 7 && day == 22){ elements.push("anniversary"); }
 
-		if (minute >= 0 && minute < 5){ elements.push("oclock"); }
+
+		if (minute >= 0 && minute < 5){ }
 		if (minute >= 5 && minute < 10) { elements.push("five","past"); }
 		if (minute >= 10 && minute < 15) { elements.push("ten","past"); }
 		if (minute >= 15 && minute < 20) { elements.push("quarter","past"); }
 		if (minute >= 20 && minute < 25) { elements.push("twenty","past"); }
 		if (minute >= 25 && minute < 30) {
-			elements.push("five","before","half");
+			elements.push("five","befor","half");
 			hour = (hour + 1) % 12;
 		}
 
@@ -109,22 +104,22 @@ Module.register("MMM-bernwordclock",{
 		}
 
 		if (minute >= 40 && minute < 45) {
-			elements.push("twenty","before");
+			elements.push("twenty","befor");
 			hour = (hour + 1) % 12;
 		}
 
 		if (minute >= 45 && minute < 50) {
-			elements.push("quarter","before");
+			elements.push("quarter","befor");
 			hour = (hour + 1) % 12;
 		}
 
 		if (minute >= 50 && minute < 55) {
-			elements.push("ten","before");
+			elements.push("ten","befor");
 			hour = (hour + 1) % 12;
 		}
 
 		if (minute >= 55 ) {
-			elements.push("five","before");
+			elements.push("five","befor");
 			hour = (hour + 1) % 12;
 		}
 
@@ -216,17 +211,16 @@ Module.register("MMM-bernwordclock",{
 
 		var wrapper = document.createElement("div");	
 		wrapper.innerHTML = "<span id=\"dot1\">.</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"dot2\">.</span><br />" + 
-								"&nbsp;<span id=\"it\">I T</span> V <span id=\"is\">I S</span> I K <span id=\"five\">F I V E</span> E&nbsp;<br />" +
-								"&nbsp;<span id=\"quarter\">Q U A R T E R</span> I <span id=\"ten\" >T E N</span> G&nbsp;<br />" +
-								"&nbsp;<span id=\"twenty\">T W E N T Y</span> & S E <span id=\"to\">T O</span> Y&nbsp;<br />" +
-								"&nbsp;<span id=\"past\">P A S T </span>B <span id=\"half\">H A L F </span>A S K&nbsp;<br />" +
-								"&nbsp;<span id=\"anniversary\">V & S 0 7 2 2 2 0 1 6 </span> E&nbsp;<br />" +
-								"&nbsp;<span id=\"one\">O N E </span><span id=\"two\">T W O </span><span id=\"three\">T H R E E</span> T&nbsp;<br />" +
-								"&nbsp;<span id=\"four\">F O U R</span> T <span id=\"five\">F I V E </span>I A T&nbsp;<br />" +
-								"&nbsp;<span id=\"six\">S I X </span>N I A <span id=\"seven\">S E V E N</span> O&nbsp;<br />" +
-								"&nbsp;<span id=\"eight\">E I G H T </span><span id=\"nine\">N I N E </span>S B O&nbsp;<br />" +
-								"&nbsp;<span id=\"ten\">T E N </span>E C <span id=\"eleven\">E L E V E N</span> T&nbsp;<br />" +
-								"&nbsp;<span id=\"twelve\">T W E L V E </span><span id=\"oclock\">O C L O C K</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"es\">E S</span> K <span id=\"isch\"> I S C H </span> A <span id=\"füf\">F Ü F</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"viertu\">V I E R T U</span> B F <span id=\"zää\" >Z Ä Ä</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"zwänzg\">Z W Ä N Z G</span> S I <span id=\"vor\">V O R</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"ab\">A B </span>O <span id=\"haubi\">H A U B I </span>E G E&nbsp;<br />" +
+								"&nbsp;<span id=\"eis\">E I S </span><span id=\"zwöi\">Z W Ö I </span>S <span id=\"drü\">D R Ü</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"vieri\">V I E R I</span> <span id=\"füfi\">F Ü F I </span>Q T&nbsp;<br />" +
+								"&nbsp;<span id=\"sächsi\">S Ä C H S I </span><span id=\"sibni\">S I B N I</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"achti\">A C H T I </span><span id=\"nüni\">N Ü N I </span>E L&nbsp;<br />" +
+								"&nbsp;<span id=\"zäni\">Z Ä N I </span>E R B <span id=\"eufi\">E U F I</span>&nbsp;<br />" +
+								"&nbsp;<span id=\"zwöufi\">Z W Ö U F I </span>N A U H R&nbsp;<br />" +
 								"<span id=\"dot3\">.</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"dot4\">.</span><br />";
 
 		return wrapper;
