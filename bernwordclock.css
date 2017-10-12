@@ -1,13 +1,77 @@
+@font-face{
+  font-family: "Raleway";
+  src: url("fonts/Raleway-Regular.woff") format("woff");
+}
+
+@font-face{
+  font-family: "Quicksand";
+  src: url("fonts/Quicksand-Regular.woff") format("woff");
+}
+
 .MMM-bernwordclock {
 
-	font-family: Courier;
+	font-family: "Quicksand";
 	color: #1A1A1A;
 	font-weight: bold;
-	font-size: 80%;
-
+	/*font-size: 2em;
+  text-transform: uppercase;
+  letter-spacing: 1em;*/
 
 }
 
 .MMM-bernwordclock .white {
 	color: #FFFFFF;
 }
+
+.clock{
+  width: 85vw;
+  height: 75vw;
+  max-width: 85vw;
+  max-height: 75vw;
+  overflow: hidden;
+}
+
+.clock-grid{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+}
+
+glyph {
+  float: left;
+  display: block;
+  width: 6.25%;
+  height: 5.25%;
+  font-size: 2.6vh;
+  font-weight: 500;
+  line-height: 4.5vh;
+  text-align: center;
+  color: #222;
+  transition: color 400ms ease-in-out;
+}
+
+.on glyph {
+  color: white;
+}
+
+.anniversary glyph{
+  color: #cec3ad;
+}
+.anniversary:not(.on) glyph{
+  color: #222;
+}
+
+@media screen and (min-height: 1200px) and (max-width: 1200px) {
+  glyph {
+    font-size: 1.6vh;
+  }
+}
+
+

@@ -12,7 +12,6 @@ Module.register("MMM-bernwordclock",{
 	// Define module defaults
 	defaults: {
 		updateInterval: 1000,
-		
 	},
 
 	// Define required scripts.
@@ -32,202 +31,244 @@ Module.register("MMM-bernwordclock",{
 		// Set locale.
 		moment.locale(config.language);
 
-		this.elements = [];
-
-		this.elements["hour1"] = "one";
-		this.elements["hour2"] = "two";
-		this.elements["hour3"] = "three";
-		this.elements["hour4"] = "four";
-		this.elements["hour5"] = "five";
-		this.elements["hour6"] = "six";
-		this.elements["hour7"] = "seven";
-		this.elements["hour8"] = "eight";
-		this.elements["hour9"] = "nine";
-		this.elements["hour10"] = "ten";
-		this.elements["hour11"] = "eleven";
-		this.elements["hour12"] = "twelve";
-
-		this.elements["before"] = "to";
-		this.elements["past"] = "past";
-
-		this.elements["five"] = "five";
-		this.elements["ten"] = "ten";
-		this.elements["quarter"] = "quarter";
-		this.elements["twenty"] = "twenty";
-		this.elements["half"] = "half";
-
-		this.elements["it"] = "it";
-		this.elements["is"] = "is";
-
-		this.elements["dot1"] = "dot1";
-		this.elements["dot2"] = "dot2";
-		this.elements["dot3"] = "dot3";
-		this.elements["dot4"] = "dot4";
-		this.elements["oclock"] = "oclock";
-
-		this.elements["anniversary"] = "V&S07222016"
-
 		// Set Interval for Update
 		var self = this;
 		setInterval(function() {
-			self.updateWordClock();
+			self.updateClock();
 		}, this.config.updateInterval);
 	},
 
-	updateWordClock: function() {
-
-		this.resetWordClock();
-
-	    var currentTime = moment();
-	    var elements = ["it","is"];
-
-	  var month = currentTime.month();
-	  var day = currentTime.day();
-
-		var hour = currentTime.hour() % 12;
-		var minute = currentTime.minute();
-		if (month == 7 && day == 22){ elements.push("anniversary"); }
-
-		if (minute >= 0 && minute < 5){ elements.push("oclock"); }
-		if (minute >= 5 && minute < 10) { elements.push("five","past"); }
-		if (minute >= 10 && minute < 15) { elements.push("ten","past"); }
-		if (minute >= 15 && minute < 20) { elements.push("quarter","past"); }
-		if (minute >= 20 && minute < 25) { elements.push("twenty","past"); }
-		if (minute >= 25 && minute < 30) {
-			elements.push("five","before","half");
-			hour = (hour + 1) % 12;
-		}
-
-		if (minute >= 30 && minute < 35) {
-			elements.push("half");
-			hour = (hour + 1) % 12;
-		}
-
-		if (minute >= 35 && minute < 40) {
-			elements.push("five","past","half");
-			hour = (hour + 1) % 12;
-		}
-
-		if (minute >= 40 && minute < 45) {
-			elements.push("twenty","before");
-			hour = (hour + 1) % 12;
-		}
-
-		if (minute >= 45 && minute < 50) {
-			elements.push("quarter","before");
-			hour = (hour + 1) % 12;
-		}
-
-		if (minute >= 50 && minute < 55) {
-			elements.push("ten","before");
-			hour = (hour + 1) % 12;
-		}
-
-		if (minute >= 55 ) {
-			elements.push("five","before");
-			hour = (hour + 1) % 12;
-		}
-
-
-		elements.push(this.setHour(hour));
-		var dots = this.setDot(minute);
-		for (d in dots) {
-			elements.push(dots[d]);
-		}
-
-		this.changeToAchtive(elements);
-	}, 
-
-	setDot : function(minute) {
-
-		minute = minute % 5;
-		var elements = [];
-
-		switch (minute) {
-			case 0:
-				break;
-			case 1:
-				elements.push("dot1");
-				break;
-			case 2:
-				elements.push("dot1","dot2");
-				break;
-			case 3:
-				elements.push("dot1","dot2","dot3");
-				break;
-			case 4:
-				elements.push("dot1","dot2","dot3","dot4");
-				break;
-		}
-
-		return elements;
-	},
-	
-	setHour: function(hour) {
-
-		switch(hour) {
-			case 0:
-				return "hour12";
-			case 1:
-				return "hour1";
-			case 2:
-				return "hour2";
-			case 3:
-				return "hour3";
-			case 4:
-				return "hour4";
-			case 5:
-				return "hour5";
-			case 6:
-				return "hour6";
-			case 7:
-				return "hour7";
-			case 8:
-				return "hour8";
-			case 9:
-				return "hour9";
-			case 10:
-				return "hour10";
-			case 11:
-				return "hour11";
-			case 12:
-				return "hour12";
-		}
+	el: function(selector) {
+	  return document.querySelector(selector);
 	},
 
-	resetWordClock: function() {
-
-		for (var i in this.elements) {
-			var item = document.getElementById(this.elements[i]);
-			item.className = "";
-		}
-
+	setClockElOn: function(selector) {
+	  this.el(selector).classList.add('on');
 	},
 
-	changeToAchtive: function(elements) {
-		for (var i in elements) {
-			var item = document.getElementById(this.elements[elements[i]]);
-			item.className = "white";
-		}
+	setPrefixElOn: function(number) {
+	  var prefixElements = document.querySelectorAll('.prefix');
+	  prefixElements[number-1].classList.add('on');
 	},
-    
+
+	setSuffixElOn: function(number) {
+	  if(number == 13) number = 1;
+	  var suffixElements = document.querySelectorAll('.suffix');
+	  suffixElements[number-1].classList.add('on');
+	},
+
+	setMinutes: function(minutes) {
+	  minutes = minutes.toString().split('');
+
+	  switch(parseInt(minutes[0], 10)) {
+	    case 2:
+	      this.setClockElOn('.twenty-minutes');
+	      break;
+	    case 3:
+	      this.setClockElOn('.thirty-minutes');
+	      break;
+	    case 4:
+	      this.setClockElOn('.forty-minutes');
+	      break;
+	    case 5:
+	      this.setClockElOn('.fifty-minutes');
+	      break;
+	  }
+
+	  if(minutes % 10 != 0) {
+	    this.setSuffixElOn(parseInt(minutes[1], 10))
+	  }
+	},
+
+	clearClock: function() {
+	  var allNodeList = document.querySelectorAll('*');
+		var allElements = Array.prototype.slice.call(allNodeList, 0);
+	  allElements.forEach(function(element) {
+	    element.classList.remove('on');
+	  });
+	},
+
+	/** Main / Update Clock
+	----------------------------------------------------------------------------- */
+	updateClock: function() {
+	  var date = moment();
+	  var hour = date.hours();
+	  var minutes = date.minutes();
+
+	  var month = moment().format("MM");
+	  var day = moment().format("DD");
+
+
+
+	  // Convert 24 hour time to 12 hour
+	  if (hour >= 13) hour = hour-12;
+	  if (hour == 0) hour = 12;
+
+	  // 'Turn off' all clock elements
+	  this.clearClock();
+
+	  if (month == "10" && day == "12") {
+  		document.querySelector('.anniversary').classList.add("on");
+	  }
+	  // One minute past [hour]
+	  if(minutes == 1) {
+	    this.setClockElOn('.one');
+	    this.setClockElOn('.minute');
+	    this.setClockElOn('.past');
+	    this.setSuffixElOn(hour);
+	    return;
+	  }
+
+	  // [minutes] past [hour]
+	  if(minutes <= 12 && minutes >= 2) {
+	    this.setPrefixElOn(minutes);
+	    this.setClockElOn('.minutes');
+	    this.setClockElOn('.past');
+	    this.setSuffixElOn(hour);
+	    return;
+	  }
+
+	  switch(minutes) {
+	    // [hour] o'clock
+	    case 0:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.oclock');
+	      return;
+	    // [hour] [minutes]
+	    case 13:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.thirteen');
+	      return;
+	    case 14:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.fourteen');
+	      return;
+	    case 16:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.sixteen');
+	      return;
+	    case 17:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.seventeen');
+	      return;
+	    case 18:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.eighteen');
+	      return;
+	    case 19:
+	      this.setPrefixElOn(hour);
+	      this.setClockElOn('.nineteen');
+	      return;
+	    // quarter past [hour]
+	    case 15:
+	      this.setClockElOn('.quarter');
+	      this.setClockElOn('.past');
+	      this.setSuffixElOn(hour);
+	      return;
+	    // twenty past [hour]
+	    case 20:
+	      this.setClockElOn('.twenty');
+	      this.setClockElOn('.past');
+	      this.setSuffixElOn(hour);
+	      return;
+	    // half past [hour]
+	    case 30:
+	      this.setClockElOn('.half');
+	      this.setClockElOn('.past');
+	      this.setSuffixElOn(hour);
+	      return;
+	    // half to [next hour]
+	    case 40:
+	      this.setClockElOn('.twenty');
+	      this.setClockElOn('.to');
+	      this.setSuffixElOn(hour+1);
+	      return;
+	    // quarter to [next hour]
+	    case 45:
+	      this.setClockElOn('.quarter');
+	      this.setClockElOn('.to');
+	      this.setSuffixElOn(hour+1);
+	      return;
+	    // ten to [next hour]
+	    case 50:
+	      this.setClockElOn('.ten');
+	      this.setClockElOn('.to');
+	      this.setSuffixElOn(hour+1);
+	      return;
+	    // five to [next hour]
+	    case 55:
+	      this.setClockElOn('.five');
+	      this.setClockElOn('.to');
+	      this.setSuffixElOn(hour+1);
+	      return;
+  	}
+
+		  // [hour] [minutes]
+	  this.setPrefixElOn(hour);
+	  this.setMinutes(minutes);
+	},
+
 	// Override dom generator.
 	getDom: function() {
 
 		var wrapper = document.createElement("div");	
-		wrapper.innerHTML = "<span id=\"dot1\">.</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"dot2\">.</span><br />" + 
-								"&nbsp;<span id=\"it\">I T</span> V <span id=\"is\">I S</span> I K <span id=\"five\">F I V E</span> E&nbsp;<br />" +
-								"&nbsp;<span id=\"quarter\">Q U A R T E R</span> I <span id=\"ten\" >T E N</span> G&nbsp;<br />" +
-								"&nbsp;<span id=\"twenty\">T W E N T Y</span> & S E <span id=\"to\">T O</span> Y&nbsp;<br />" +
-								"&nbsp;<span id=\"past\">P A S T </span>B <span id=\"half\">H A L F </span>A S K&nbsp;<br />" +
-								"&nbsp;<span id=\"anniversary\">V & S 0 7 2 2 2 0 1 6 </span> E&nbsp;<br />" +
-								"&nbsp;<span id=\"one\">O N E </span><span id=\"two\">T W O </span><span id=\"three\">T H R E E</span> T&nbsp;<br />" +
-								"&nbsp;<span id=\"four\">F O U R</span> T <span id=\"five\">F I V E </span>I A T&nbsp;<br />" +
-								"&nbsp;<span id=\"six\">S I X </span>N I A <span id=\"seven\">S E V E N</span> O&nbsp;<br />" +
-								"&nbsp;<span id=\"eight\">E I G H T </span><span id=\"nine\">N I N E </span>S B O&nbsp;<br />" +
-								"&nbsp;<span id=\"ten\">T E N </span>E C <span id=\"eleven\">E L E V E N</span> T&nbsp;<br />" +
-								"&nbsp;<span id=\"twelve\">T W E L V E </span><span id=\"oclock\">O C L O C K</span>&nbsp;<br />" +
-								"<span id=\"dot3\">.</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id=\"dot4\">.</span><br />";
+		wrapper.classList.add("clock-grid");
+
+		wrapper.innerHTML = "<clock class=\"clock\">" + 
+		"<word class=\"one prefix\"><glyph>o</glyph><glyph>n</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"two prefix\"><glyph>t</glyph><glyph>w</glyph><glyph>o</glyph></word>" + 
+		"<word class=\"three prefix\"><glyph>t</glyph><glyph>h</glyph><glyph>r</glyph><glyph>e</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"four prefix\"><glyph>f</glyph><glyph>o</glyph><glyph>u</glyph><glyph>r</glyph></word>" + 
+		"<glyph>s</glyph><glyph>a</glyph><glyph>t</glyph>" + 
+		"<word class=\"five prefix\"><glyph>f</glyph><glyph>i</glyph><glyph>v</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"six prefix\"><glyph>s</glyph><glyph>i</glyph><glyph>x</glyph></word>" + 
+		"<word class=\"seven prefix\"><glyph>s</glyph><glyph>e</glyph><glyph>v</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<glyph>b</glyph><glyph>e</glyph>" + 
+		"<word class=\"eight prefix\"><glyph>e</glyph><glyph>i</glyph><glyph>g</glyph><glyph>h</glyph><glyph>t</glyph></word>" + 
+		"<word class=\"nine prefix\"><glyph>n</glyph><glyph>i</glyph><glyph>n</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"ten prefix\"><glyph>t</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<glyph>s</glyph><glyph>o</glyph><glyph>o</glyph><glyph>n</glyph>" + 
+		"<word class=\"eleven prefix\"><glyph>e</glyph><glyph>l</glyph><glyph>e</glyph><glyph>v</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"twelve prefix\"><glyph>t</glyph><glyph>w</glyph><glyph>e</glyph><glyph>l</glyph><glyph>v</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"half\"><glyph>h</glyph><glyph>a</glyph><glyph>l</glyph><glyph>f</glyph></word>" + 
+		"<word class=\"quarter\"><glyph>q</glyph><glyph>u</glyph><glyph>a</glyph><glyph>r</glyph><glyph>t</glyph><glyph>e</glyph><glyph>r</glyph></word>" + 
+		"<word class=\"minutes\"><word class=\"minute\"><glyph>m</glyph><glyph>i</glyph><glyph>n</glyph><glyph>u</glyph><glyph>t</glyph><glyph>e</glyph></word><glyph>s</glyph></word>" + 
+		"<glyph>t</glyph><glyph>o</glyph>" + 
+		"<word class=\"twenty\"><glyph>t</glyph><glyph>w</glyph><glyph>e</glyph><glyph>n</glyph><glyph>t</glyph><glyph>y</glyph></word>" + 
+		"<words class=\"thirteen\"><glyph>t</glyph><glyph>h</glyph><glyph>i</glyph><glyph>r</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></words>" + 
+		"<glyph>a</glyph><glyph>t</glyph>" + 
+		"<word class=\"anniversary\"><glyph>v</glyph><glyph>i</glyph><glyph>k</glyph><glyph>i</glyph><glyph>2</glyph><glyph>2</glyph><glyph>0</glyph><glyph>7</glyph><glyph>2</glyph><glyph>0</glyph><glyph>1</glyph><glyph>6</glyph><glyph>s</glyph><glyph>e</glyph><glyph>b</glyph><glyph>a</glyph></word>" + 
+		"<words class=\"fourteen\"><glyph>f</glyph><glyph>o</glyph><glyph>u</glyph><glyph>r</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></words>" + 
+		"<words class=\"fifteen\"><glyph>f</glyph><glyph>i</glyph><glyph>f</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></words>" + 
+		"<glyph>s</glyph>" + 
+		"<words class=\"past\"><glyph>p</glyph><glyph>a</glyph><glyph>s</glyph><glyph>t</glyph></words>" + 
+		"<word class=\"to\"><glyph>t</glyph><glyph>o</glyph></word>" + 
+		"<word class=\"sixteen\"><glyph>s</glyph><glyph>i</glyph><glyph>x</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<glyph>c</glyph><glyph>k</glyph><glyph>n</glyph>" + 
+		"<word class=\"seventeen\"><glyph>s</glyph><glyph>e</glyph><glyph>v</glyph><glyph>e</glyph><glyph>n</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"twenty-minutes\"><glyph>t</glyph><glyph>w</glyph><glyph>e</glyph><glyph>n</glyph><glyph>t</glyph><glyph>y</glyph></word>" + 
+		"<glyph>a</glyph>" + 
+		"<word class=\"eighteen\"><glyph>e</glyph><glyph>i</glyph><glyph>g</glyph><glyph>h</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"nineteen\"><glyph>n</glyph><glyph>i</glyph><glyph>n</glyph><glyph>e</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"thirty-minutes\"><glyph>t</glyph><glyph>h</glyph><glyph>i</glyph><glyph>r</glyph><glyph>t</glyph><glyph>y</glyph></word>" + 
+		"<word class=\"forty-minutes\"><glyph>f</glyph><glyph>o</glyph><glyph>r</glyph><glyph>t</glyph><glyph>y</glyph></word>" + 
+		"<word class=\"fifty-minutes\"><glyph>f</glyph><glyph>i</glyph><glyph>f</glyph><glyph>t</glyph><glyph>y</glyph></word>" + 
+		"<word class=\"oclock\"><glyph>o</glyph><glyph>c</glyph><glyph>l</glyph><glyph>o</glyph><glyph>c</glyph><glyph>k</glyph></word>" + 
+		"<word class=\"one suffix\"><glyph>o</glyph><glyph>n</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"two suffix\"><glyph>t</glyph><glyph>w</glyph><glyph>o</glyph></word>" +
+		"<glyph>m</glyph><glyph>o</glyph><glyph>o</glyph><glyph>n</glyph>" + 
+		"<word class=\"three suffix\"><glyph>t</glyph><glyph>h</glyph><glyph>r</glyph><glyph>e</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"four suffix\"><glyph>f</glyph><glyph>o</glyph><glyph>u</glyph><glyph>r</glyph></word>" + 
+		"<word class=\"five suffix\"><glyph>f</glyph><glyph>i</glyph><glyph>v</glyph><glyph>e</glyph></word>" + 
+		"<word class=\"six suffix\"><glyph>s</glyph><glyph>i</glyph><glyph>x</glyph></word>" + 
+		"<word class=\"seven suffix\"><glyph>s</glyph><glyph>e</glyph><glyph>v</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"eight suffix\"><glyph>e</glyph><glyph>i</glyph><glyph>g</glyph><glyph>h</glyph><glyph>t</glyph></word>" + 
+		"<word class=\"nine suffix\"><glyph>n</glyph><glyph>i</glyph><glyph>n</glyph><glyph>e</glyph></word>" + 
+		"<glyph>i</glyph><glyph>o</glyph>" + 
+		"<word class=\"ten suffix\"><glyph>t</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"eleven suffix\"><glyph>e</glyph><glyph>l</glyph><glyph>e</glyph><glyph>v</glyph><glyph>e</glyph><glyph>n</glyph></word>" + 
+		"<word class=\"twelve suffix\"><glyph>t</glyph><glyph>w</glyph><glyph>e</glyph><glyph>l</glyph><glyph>v</glyph><glyph>e</glyph></word>" + 
+		"<glyph>s</glyph></clock>";
 
 		return wrapper;
 	}
