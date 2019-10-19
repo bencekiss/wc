@@ -107,7 +107,7 @@ Module.register("MMM-bernwordclock",{
 	  // 'Turn off' all clock elements
 	  this.clearClock();
 
-	  if (month == "10" && day == "12") {
+	  if (month == "10" && day == "19") {
   		document.querySelector('.anniversary').classList.add("on");
 	  }
 	  // One minute past [hour]
@@ -237,7 +237,7 @@ Module.register("MMM-bernwordclock",{
 		"<word class=\"twenty\"><glyph>t</glyph><glyph>w</glyph><glyph>e</glyph><glyph>n</glyph><glyph>t</glyph><glyph>y</glyph></word>" + 
 		"<words class=\"thirteen\"><glyph>t</glyph><glyph>h</glyph><glyph>i</glyph><glyph>r</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></words>" + 
 		"<glyph>a</glyph><glyph>t</glyph>" + 
-		"<word class=\"anniversary\"><glyph>v</glyph><glyph>i</glyph><glyph>k</glyph><glyph>i</glyph><glyph>2</glyph><glyph>2</glyph><glyph>0</glyph><glyph>7</glyph><glyph>2</glyph><glyph>0</glyph><glyph>1</glyph><glyph>6</glyph><glyph>s</glyph><glyph>e</glyph><glyph>b</glyph><glyph>a</glyph></word>" + 
+		"<word class=\"anniversary\"><glyph>k</glyph><glyph>l</glyph><glyph>a</glyph><glyph>r</glyph><glyph>a</glyph><glyph>1</glyph><glyph>9</glyph><glyph>1</glyph><glyph>0</glyph><glyph>2</glyph><glyph>0</glyph><glyph>1</glyph><glyph>9</glyph><glyph>t</glyph><glyph>i</glyph><glyph>m</glyph></word>" + 
 		"<words class=\"fourteen\"><glyph>f</glyph><glyph>o</glyph><glyph>u</glyph><glyph>r</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></words>" + 
 		"<words class=\"fifteen\"><glyph>f</glyph><glyph>i</glyph><glyph>f</glyph><glyph>t</glyph><glyph>e</glyph><glyph>e</glyph><glyph>n</glyph></words>" + 
 		"<glyph>s</glyph>" + 
